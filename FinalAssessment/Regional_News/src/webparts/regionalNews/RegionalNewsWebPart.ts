@@ -23,8 +23,8 @@ export default class RegionalNewsWebPart extends BaseClientSideWebPart<IRegional
     this.domElement.innerHTML = `
     
       <div class = "panel panel-default">
-        <div class = "panel-heading col-md-12" style="background-color: #023576; color: #ccd6e4;">
-            <div style="float: left; font-size: x-large;">Regional News </div> <div style="float: right;"> <button class="btn btn-warning" type="button"style="border-radius: 100%;"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button></div>
+        <div class = "panel-heading col-md-12" style="background-color: #023576; color: #ccd6e4;height: 50px;">
+            <div style="float: left; font-size: large;">Regional News </div> <div style="float: right;"> <button class="btn btn-warning btn-xs" type="button"style=" height: 31px;"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button></div>
         </div>
         
         <div class = "panel-body">
@@ -79,7 +79,7 @@ export default class RegionalNewsWebPart extends BaseClientSideWebPart<IRegional
               }
               else if(idx == "0")
               {
-                orderedList.append("<li style='margin-left:-30px;margin-top: 60px;'><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif;color: #345c93;' data-toggle='tooltip' title='"+elem.NewsDescription+"'>&raquo;&nbsp; "+newsDescription+"</a><p style='font-size: x-small;color: #949494;margin-top: 2%;'>"+ month+" "+objDate.getDate()+", "+objDate.getFullYear()+"</p></li><hr>");
+                orderedList.append("<li style='margin-left:-30px;margin-top: 50px;'><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif;color: #345c93;' data-toggle='tooltip' title='"+elem.NewsDescription+"'>&raquo;&nbsp; "+newsDescription+"</a><p style='font-size: x-small;color: #949494;margin-top: 2%;'>"+ month+" "+objDate.getDate()+", "+objDate.getFullYear()+"</p></li><hr>");
               }
               else
               {

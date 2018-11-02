@@ -94,7 +94,7 @@ export default class PeopleSpeakFinalWebPart extends BaseClientSideWebPart<IPeop
 
     <!-- Left and right controls -->
 
-    <a class="left carousel-control" href="#myCarousel1" data-slide="next" style="margin-top:50%;height: max-content;">
+    <a class="left carousel-control" href="#myCarousel1" data-slide="prev" style="margin-top:50%;height: max-content;">
 
     <button class="btn btn-sq btn-warning btn-xs" style="margin-right: 45%;">
 
@@ -226,7 +226,7 @@ export default class PeopleSpeakFinalWebPart extends BaseClientSideWebPart<IPeop
 
     $(document).on("click","#NavigationList",function(){
 
-    window.location.href="https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxPeopleSpeak/AllItems.aspx";
+    window.open("https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxPeopleSpeak/AllItems.aspx",'_blank');
 
     })
 

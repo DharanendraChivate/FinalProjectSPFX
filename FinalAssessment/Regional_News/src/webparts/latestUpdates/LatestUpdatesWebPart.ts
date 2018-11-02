@@ -23,16 +23,12 @@ export default class LatestUpdatesWebPart extends BaseClientSideWebPart<ILatestU
     let url="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
     SPComponentLoader.loadCss(url);
     this.domElement.innerHTML = `
-      <div class="${styles.latestUpdates}">
-      
-        <div class="${styles.container}">
+     
         <div>
-        <label class="btn-primary col-sm-2" style="padding:0px">Latest Updates</label>
-        <marquee behavior="scroll" direction="left" id="marqueescroll" class="col-sm-10" style="border: 1px solid black;">
+        <label class="btn-primary col-sm-2" style="background-color: #071a52; padding: 0px;width: 16%; text-align: center; font-size: small; font-family: sans-serif; position: absolute; top: 20px; left: 0;">Latest Updates</label>
+        <marquee behavior="scroll" direction="left" id="marqueescroll" class="col-sm-10" style="height: 44px;width: 107%; border: 1px solid black;">
         </marquee>
         </div>
-        </div>
-      </div>
       `;
       this.GetUpdates();
       $(document).ready(function () {
@@ -58,7 +54,7 @@ export default class LatestUpdatesWebPart extends BaseClientSideWebPart<ILatestU
       call.done(function (data, textStatus, jqXHR) {
         var Updates = $("#marqueescroll");
         $.each(data.d.results, function (index, value) {       
-          Updates.append(`<p style="margin:0;padding:0;margin-left:20px;display:inline-block;vertical-align:top;">${value.UpdateDescription}</p>`);
+          Updates.append(`<p style="margin-top: 11px;padding: 0;margin-left: 20px;display: inline-block;vertical-align: top;font-size: smaller;font-family: cursive;">  ${value.UpdateDescription}</p>`);         
         });
       });
       call.fail(function (jqXHR, textStatus, errorThrown) {
