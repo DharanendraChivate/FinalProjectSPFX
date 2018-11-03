@@ -44,7 +44,7 @@ export default class LatestUpdatesWebPart extends BaseClientSideWebPart<ILatestU
     else
     {
       var call = $.ajax({
-        url: this.context.pageContext.web.absoluteUrl+`/_api/web/Lists/getByTitle('SpfxLatestUpdates')/Items?$select=UpdateDescription`,
+        url: this.context.pageContext.web.absoluteUrl+`/_api/web/Lists/getByTitle('SpfxLatestUpdates')/Items?$top=3&$select=UpdateDescription,Created&$orderby=Created desc`,
         type:"GET",
           dataType: "json",
           headers: {
