@@ -1,7 +1,6 @@
 import {
   Version,
   Log,
-  ServiceScope,
   Environment,
   EnvironmentType
 } from '@microsoft/sp-core-library';
@@ -35,24 +34,6 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
 
   public render(): void {
 
-    // this.context.statusRenderer.clearError(this.domElement);
-    // this.context.statusRenderer.displayLoadingIndicator(this.domElement, strings.Loading);
-    // Log.verbose('SpFxNuggets', 'Invoking render');
-
-    // this._webInfoProvider.getWebInfo().then((webInfo: IWebInfo) => {
-    //   if (this.properties.fail) {
-    //     throw new Error('Mayday');
-    //   }
-    //   Log.info('SpFxNuggets', 'Service OK', this.context.serviceScope);
-    //   this.context.statusRenderer.clearLoadingIndicator(this.domElement);
-    //   this.context.domElement.innerHTML = `<h1>${webInfo.title}</h1>`;
-
-    // }).catch((err) => {
-    //   Log.error('SpFxNuggets', err);
-    //   this.context.statusRenderer.clearLoadingIndicator(this.domElement);
-    //   this.context.statusRenderer.renderError(this.domElement, err);
-    // });
-
     AbsoluteUrl = this.context.pageContext.web.absoluteUrl;
     var contextuser = this.context.pageContext.user.email;
 
@@ -74,14 +55,16 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
                 <div class="${ styles.column}">   <!-- column -->
                   <div style="text-align:center"  class="${styles.border}">    <!-- border-->
                       <div class="${styles.image}">
+                      <!-- In the below code the src attribute specifies the URL of an image-->
                       <img src="" class="img-responsive" id="image" alt="Cinque Terre" width="150" height="100"> 
                       </div>
+                      <!-- In the below script the title,role and description are assigned -->
                     <p class="${ styles.title}" id="Title" style="font-size: larger;font-weight: lighter;"></p>
                     <p class="${ styles.subTitle}" id="Role" style="font-size: small;font-weight: lighter;font-style: italic;"></p>
                     <p class="${ styles.description}" id="Description" style="font-size: smaller; font-weight: 100;font-style: italic;"></p>
                       
-                      <i  class="${ styles.ThumbsUp} fa fa-thumbs-up fa-xs" style="color:#f2b914;" id="ThumbsUp"></i>
-                      <i  class="${ styles.CommentsIcon} fa fa-comments fa-xs" id="CommentsIcon" style="color:#f2b914;"></i>
+                      <i  class="${ styles.ThumbsUp} fa fa-thumbs-up fa-xs" style="color:#f2b914;cursor: pointer;" id="ThumbsUp"></i>
+                      <i  class="${ styles.CommentsIcon} fa fa-comments fa-xs" id="CommentsIcon" style="color:#f2b914;cursor: pointer;"></i>
                     
                       <span>                    
                              <button  class="${ styles.hyperlinks} btn btn-link" Id="ReadMore">Read More</button> 
@@ -108,6 +91,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-3">
+                                <!-- In the below script tag the src attribute specifies the URL of an image -->
                                     <img src="" id="popupimage" class="img-responsive" alt="Cinque Terre" > 
                                     <p id ="popuprole" class="bg-success"></p>
                                 </div>
@@ -127,13 +111,11 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
                                       </div>  
                                         <div class="row">        
                                               <div class="col" id="${styles.scrollComments}">                       
-                                                    <div class="${styles.popupcomments}" id = "popupcomments">
-                                                      
+                                                    <div class="${styles.popupcomments}" id = "popupcomments">                                              
                                                           <section class="${styles["comment-list"]} comment-list" id="commentlist">
                                                                 <!-- dynamic comments -->
                                                           </section>
                                                       </div>   
-
                                                       <div class="widget-area no-padding blank">
                                                       <div class="status-upload">
                                                         <form>
@@ -172,18 +154,17 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
 
   //---------------------------method to display podacst-----------------------------//
   DisplayPodcast() {
-    if (Environment.type === EnvironmentType.Local) {
+    if (Environment.type === EnvironmentType.Local) {        //checking the hosted environment
       this.domElement.querySelector('#Error').innerHTML = "Sorry this does not work in local workbench";
     }
     else {
-
       $(document).ready(function () {
 
         $(document).on('click', '#ReadMore', function () {
-          SPFXPodcastPopupComment();
-
-          $('#ReadMorePodCast').modal('show');
+          SPFXPodcastPopupComment();         //displaying comments on click of readmore
+          $('#ReadMorePodCast').modal('show');      //displaying popup after loading the comments
         });
+        
         GetUserDetails();
         SPFXPodcast();
         SPFXPodcastLikesCount();
@@ -203,7 +184,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
         },
         async: false,
         success: function (data) {
-          CurrentUserId = data.d.Id;
+          CurrentUserId = data.d.Id;  //gets the id of the current user
         },
         error: function (data) {
           alert("An error occurred. Please try again.");
@@ -228,16 +209,16 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
 
         PodcastUser = data.d.results[0].Title;
         PodcastId = data.d.results[0].Id;
-        if (data.d.results[0].URL != null) {
-          $('#image').attr("src", data.d.results[0].URL.Url);
+        if (data.d.results[0].URL != null) {     //checking if the image url is null
+          $('#image').attr("src", data.d.results[0].URL.Url);       
           $('#popupimage').attr("src", data.d.results[0].URL.Url);
         }
-        else {
+        else {              //if the url is null a sample image will be assigned
           $('#image').attr("src", "http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg");
           $('#popupimage').attr("src", "http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg");
         }
         $('#Title').text(data.d.results[0].Title);
-        if (data.d.results[0].Role != null) {
+        if (data.d.results[0].Role != null) {       //checking if the role  is null
           $('#Role').text(data.d.results[0].Role);
           $('#popuprole').text(data.d.results[0].Role);
         }
@@ -245,7 +226,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
           $('#Role').text("Role is not available");
           $('#popuprole').text("Role is not available");
         }
-        if (data.d.results[0].Description != null) {
+        if (data.d.results[0].Description != null) {        //checking if the Description is null
           $('#Description').text((data.d.results[0].Description).substr(0, 50) + "...");
           $('#popupdescription').text(data.d.results[0].Description);
         }
@@ -253,7 +234,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
           $('#Description').text("there is no Description for this person");
           $('#popupdescription').text(" there is no Description for this person available in the list ");
         }
-        //assigning the data to the popup
+        //assigning the title to the popup
         $('.modal-title').text(data.d.results[0].Title);
       });
 
@@ -277,7 +258,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
         }
       });
       call.done(function (data, textStatus, jqXHR) {
-        LikesCount = data.d.results.filter(value => value.UserLookup.Title === PodcastUser).length;  //likescount
+        LikesCount = data.d.results.filter(value => value.UserLookup.Title === PodcastUser).length;  //checking the number of likes the current displayed person has
         $('#ThumbsUp').text(LikesCount);
         $('#popuprole').append("</br>");
         $('#popuprole').append(`<i class="fa fa-thumbs-up"> ${LikesCount} </i>`);
@@ -303,8 +284,8 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
         }
       });
       call.done(function (data, textStatus, jqXHR) {
-        var counter = data.d.results.filter(value => value.UserLookup.Title === PodcastUser).length; //commentscount
-        $('#CommentsIcon').text(counter + "comment(s)");
+        var CommentsCount = data.d.results.filter(value => value.UserLookup.Title === PodcastUser).length;  //checking the number of comments the current displayed person has
+        $('#CommentsIcon').text(CommentsCount + "comment(s)"); 
       });
       call.fail(function (jqXHR, textStatus, errorThrown) {
         var response = JSON.parse(jqXHR.responseText);
@@ -354,7 +335,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
                           </header>
                           <div class="comment-post">
                             <p>
-                            ${value.Comment}
+                            ${value.Comment}           
                              </p>
                            </div>                
                         </div>
@@ -382,7 +363,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
           pnp.sp.web.lists.getByTitle('SPFXPodcastComments').items.add({ Comment: Comment, UserLookupId: PodcastId })
             .then(() => {
               SPFXPodcastPopupComment();            //refreshing comments section after entering comment
-              SPFXPodcastCommentsCount();
+              SPFXPodcastCommentsCount();          //refreshing comments count after entering comment
             });
         }
       })
@@ -392,6 +373,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [

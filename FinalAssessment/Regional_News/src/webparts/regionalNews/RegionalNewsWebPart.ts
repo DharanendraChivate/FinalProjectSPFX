@@ -27,7 +27,7 @@ export default class RegionalNewsWebPart extends BaseClientSideWebPart<IRegional
             <div style="float: left; font-size: large;">Regional News </div> <div style="float: right;"> <button class="btn btn-warning btn-xs" type="button"style=" height: 31px;"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button></div>
         </div>
         
-        <div class = "panel-body">
+        <div class = "panel-body" id="panelbody">
           <ul style="list-style-type:none;" id="RegionalNewsList">
           
           </ul>
@@ -41,12 +41,14 @@ export default class RegionalNewsWebPart extends BaseClientSideWebPart<IRegional
 
     if (Environment.type === EnvironmentType.Local)
      {
-      this.domElement.querySelector('#Error').innerHTML = "Sorry this does not work in local workbench";
+      this.domElement.querySelector('#panelbody').innerHTML = "Sorry this does not work in local workbench";
     } else 
     {
       var Absoluteurl = this.context.pageContext.web.absoluteUrl;
       $(document).ready(function () {
         DisplayRegionalNews();
+
+        /*************Get Latest 3 Regional News*****************/
         function DisplayRegionalNews() {
           var call = jQuery.ajax({
             url: Absoluteurl + "/_api/Web/Lists/getByTitle('SpfxRegionalNews')/Items?$top=3&$orderby=Created desc",
@@ -61,17 +63,17 @@ export default class RegionalNewsWebPart extends BaseClientSideWebPart<IRegional
           call.done(function (data, textStatus, jqXHR) {
             $('#RegionalNewsList li').remove();
             var orderedList = $('#RegionalNewsList');
-            var newsSize: any = data.d.results.length - 1;
+            var listSize: any = data.d.results.length - 1;
             $.each(data.d.results, function (idx, elem) {
               var objDate = new Date(elem.Created),
                 locale = "en-us",
                 month = objDate.toLocaleString(locale, { month: "long" });
               var newsDescription = elem.NewsDescription.length > 68 ? elem.NewsDescription.substr(0, 68) + "..." : elem.NewsDescription;
-              if (idx == newsSize) {
-                orderedList.append("<li style='margin-left:-30px;'><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif; color: #345c93;' data-toggle='tooltip' title='" + elem.NewsDescription + "'>&raquo;&nbsp; " + newsDescription + "</a><p style='font-size: x-small;color: #949494;margin-top: 1%;'>" + month + " " + objDate.getDate() + ", " + objDate.getFullYear() + "</p></li>");
+              if (idx == listSize) {
+                orderedList.append("<li style='margin-left:-30px; margin-top: -9%;'><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif; color: #345c93;' data-toggle='tooltip' title='" + elem.NewsDescription + "'>&raquo;&nbsp; " + newsDescription + "</a><p style='font-size: x-small;color: #949494;margin-top: 1%;'>" + month + " " + objDate.getDate() + ", " + objDate.getFullYear() + "</p></li>");
               }
               else if (idx == "0") {
-                orderedList.append("<li style='margin-left:-30px;margin-top: 40px;height: 80px;'><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif;color: #345c93;' data-toggle='tooltip' title='" + elem.NewsDescription + "'>&raquo;&nbsp; " + newsDescription + "</a><p style='font-size: x-small;color: #949494;margin-top: 1%;'>" + month + " " + objDate.getDate() + ", " + objDate.getFullYear() + "</p><hr></li>");
+                orderedList.append("<li style='margin-left:-30px;margin-top: 40px;height: 80px; margin-top: 46px;'><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif;color: #345c93;' data-toggle='tooltip' title='" + elem.NewsDescription + "'>&raquo;&nbsp; " + newsDescription + "</a><p style='font-size: x-small;color: #949494;margin-top: 1%;'>" + month + " " + objDate.getDate() + ", " + objDate.getFullYear() + "</p><hr></li>");
               }
               else {
                 orderedList.append("<li style='margin-left:-30px';height: 80px;><a href='https://acuvateuk.sharepoint.com/sites/TrainingDevSite/Lists/SpfxRegionalNews/AllItems.aspx' target='_blank' style='font-family: sans-serif;color: #345c93;' data-toggle='tooltip' title='" + elem.NewsDescription + "'>&raquo;&nbsp; " + newsDescription + "</a><p style='font-size: x-small;color: #949494;margin-top: 1%;'>" + month + " " + objDate.getDate() + ", " + objDate.getFullYear() + "</p><hr></li>");

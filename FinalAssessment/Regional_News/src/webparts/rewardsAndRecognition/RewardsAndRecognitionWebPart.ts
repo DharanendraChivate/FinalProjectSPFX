@@ -6,12 +6,7 @@ import {
 } from '@microsoft/sp-webpart-base';
 import * as strings from 'RewardsAndRecognitionWebPartStrings';
 import * as pnp from 'sp-pnp-js';
-import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
-//import * as JQuery from 'jquery';
-
-import * as $ from 'jquery';
-import * as bs from 'bootstrap';
-//import 'bootsrap';
+import 'jquery';
 require('bootstrap');
 import {SPComponentLoader} from '@microsoft/sp-loader'
 var TotalLikePerPerson = new Array();
@@ -33,8 +28,8 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
     this.domElement.innerHTML = `
     
       <div class="panel panel-primary" style="width:300px; margin-left:-16px;border-radius: 0px;">
-      <div class="panel-heading" style="font-size:large; background-color:#023576;border-radius:initial">Rewards And Recorgnition
-      <button class="btn btn-warning btn-xs" id="roundbutton" style="float : right">
+      <div class="panel-heading" style="font-size:15px; background-color:#023576;border-radius:initial">Rewards And Recorgnition&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="btn btn-warning btn-circle" id="roundbutton" style="border-radius: 50%;">
       <i class='fa fa-trophy' style='font-size:20px;color:white'></i>
       </button> 
       </div>
@@ -44,7 +39,7 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
       </table>
       </div>
       </div>
-      <div class="modal fade rrwpcomments" role="dialog" id="commentModal" >
+      <div class="modal fade" role="dialog" id="commentModal">
      
       </div>
       `;
@@ -60,7 +55,6 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
       $(document).on('click','.comment',function (){
         CommentUser = $(this).attr("id");
         getIncreaseTheComment(CommentUser);
-        $('#commentModal').modal('show');
       });
       $(document).on('click','.btn-success',function (){
         var CommentValue =$("#Comments").val().toString().trim().replace("  ", " ");
@@ -127,7 +121,7 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
             }
           });
           call.done(function (data, textStatus, jqXHR) {
-             $("#commentModal div").remove();
+            $("#commentModal div").remove();
             table = $("#commentModal");
            
             table.append(`<div class="modal-dialog">
@@ -136,7 +130,7 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 class="modal-title" style="font-size: 30px;font-family: cursive;color: antiquewhite;">Comments</h4>
               </div>
-              <div class="modal-body rrwpcommentsbody">
+              <div class="modal-body">
               
             </div>
               <div class="EnterYourComment">
@@ -150,7 +144,7 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
             </div>
             
           </div>`);
-          var ModelBody = $(".rrwpcommentsbody")
+          var ModelBody = $(".modal-body")
             $.each(data.d.results, function (idx, elem) {
               var objDate = new Date(elem.Created),
                 locale = "en-us",
@@ -168,7 +162,7 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
         call.fail(function (jqXHR, textStatus, errorThrown) {
             var response = JSON.parse(jqXHR.responseText);
             var message = response ? response.error.message.value : textStatus;
-            alert("Call failed. Error: " + message);
+            alert("Call hutch failed. Error: " + message);
         });
       }
       function getTotalPerson(){
@@ -213,8 +207,7 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
         TotalPersonLikeCall.done(function (data, textStatus, jqXHR) {
           TotalLikePerPerson.push(data.d.results.length);
           for(var checkCount=0; checkCount<data.d.results.length; checkCount++){
-            alreadyliked.push({UserLikedId:data.d.results[0].UserLookupId, RewardUserId:data.d.results[0].AuthorId });
-            
+            alreadyliked.push({UserLikedId:data.d.results[checkCount].UserLookupId, RewardUserId:data.d.results[checkCount].AuthorId });
           }
         });
         TotalPersonLikeCall.fail(function (jqXHR, textStatus, errorThrown) {
@@ -237,7 +230,6 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
         });
         TotalPersonLikeCall.done(function (data, textStatus, jqXHR) {
           TotalCommentPerPerson.push(data.d.results.length);
-         // alert(data.d.results.length)
         });
         TotalPersonLikeCall.fail(function (jqXHR, textStatus, errorThrown) {
           var response = JSON.parse(jqXHR.responseText);
@@ -261,23 +253,22 @@ export default class RewardsAndRecognitionWebPart extends BaseClientSideWebPart<
           var TagIndex = 0;
           $(".RewardsAndRecorgnition tr").remove();
           $.each(data.d.results, function(index, element){
-            RewardsAndRecorgnitionDiv.append(`<tr style="border-style: solid;border-width: 9px;border-color: white;"><td style="text-align: center;width:75px;"><div><img src="${element.ImageURL.Url}" alt="${element.Title}" style="width:75px" data-toggle='tooltip' title='${element.Title}' /><i class="fas fa-caret-right" style="position: absolute; top: `+(29+ TagIndex++*24)+`%; right: 72%; font-size: 18px; color: #345c93;"></div></td>
-            <td style="text-align: center;background-color: lavender;"><div style="color: #345c93;font-size: medium;padding-top: 7px;padding-bottom: 7px;"><div style="white-space: nowrap; width: 100px; overflow: hidden;text-overflow: ellipsis;float:left;margin-left: 11px;" data-toggle='tooltip' title='${element.Title}' >${element.Title}</div><div style="white-space: nowrap; width: 95px; overflow: hidden;text-overflow: ellipsis; float:right" data-toggle='tooltip' title='${element.Role}'>,${element.Role}</div></div>
+            RewardsAndRecorgnitionDiv.append(`<tr style="border-style: solid;border-width: 9px;border-color: white;"><td style="text-align: center;width:75px;"><div><img src="${element.ImageURL.Url}" alt="${element.Title}" style="width:75px" data-toggle='tooltip' title='${element.Title}' />
+            <i class="fas fa-caret-right" style="position: absolute; top: `+(29+ TagIndex++*24)+`%; right: 72%; font-size: 18px; color: darkblue;"></div></td>
+            <td style="text-align: center;background-color: lavender;"><div style="color: darkblue;font-size: medium;padding-top: 7px;padding-bottom: 7px;"><div style="white-space: nowrap; width: 100px; overflow: hidden;text-overflow: ellipsis;float:left;margin-left: 11px;" data-toggle='tooltip' title='${element.Title}' >${element.Title}</div><div style="white-space: nowrap; width: 95px; overflow: hidden;text-overflow: ellipsis; float:right" data-toggle='tooltip' title='${element.Role}'>,${element.Role}</div></div>
             <div style="width:186px;font-size: small; white-space: nowrap; width: 154px; overflow: hidden;text-overflow: ellipsis;margin-left: 14px;" data-toggle='tooltip' title='${element.Description}'>${element.Description}</div>
-            <div><div class="TotalLike" style="font-size:x-small"><button type="button" id="${element.ID}" class="Like" style="background-color:lavender;border: none;"><i class="fa fa-thumbs-up" aria-hidden="true" style="color: #345c93;"></i>(`+TotalLikePerPerson[index]+`like)</button>&nbsp;&nbsp;&nbsp;
-            <!-- <button type="button" id="${element.ID}" class="comment" data-toggle="modal" data-target="#commentModal" style="background-color:lavender;border: none;"><i class="fa fa-comment" aria-hidden="true" style="color: #345c93;"></i>(`+TotalCommentPerPerson[index] +`comment)</button> -->
-            <button type="button" id="${element.ID}" class="comment" style="background-color:lavender;border: none;"><i class="fa fa-comment" aria-hidden="true" style="color: #345c93;"></i>(`+TotalCommentPerPerson[index] +`comment)</button>
-            </div></div></td></tr>`
+            <div><div class="TotalLike" style="font-size:x-small"><button type="button" id="${element.ID}" class="Like" style="background-color:lavender;border: none;"><i class="fa fa-thumbs-up" aria-hidden="true" style="color: darkblue;"></i>(`+TotalLikePerPerson[index]+`like)</button>&nbsp;&nbsp;&nbsp;<button type="button" id="${element.ID}" class="comment" data-toggle="modal" data-target="#commentModal" style="background-color:lavender;border: none;"><i class="fa fa-comment" aria-hidden="true" style="color: darkblue;"></i>(`+TotalCommentPerPerson[index] +`comment)</button></div></div></td></tr>`
             );
           });
         });
         RewardsAndRecorgnitionDivcall.fail(function (jqXHR, textStatus, errorThrown) {
           var response = JSON.parse(jqXHR.responseText);
           var message = response ? response.error.message.value : textStatus;
-          alert("Call failed. Error: " + message);
+          alert("Call hutch failed. Error: " + message);
       })
       }
   }
+
 
   protected get dataVersion(): Version {
     return Version.parse('1.0');
