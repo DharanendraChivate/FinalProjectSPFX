@@ -56,7 +56,7 @@ export default class PodcastWebPart extends BaseClientSideWebPart<IPodcastWebPar
                   <div style="text-align:center"  class="${styles.border}">    <!-- border-->
                       <div class="${styles.image}">
                       <!-- In the below code the src attribute specifies the URL of an image-->
-                      <img src="" class="img-responsive" id="image" alt="Cinque Terre" width="150" height="100"> 
+                      <img src="" class="img-responsive" id="image" alt="Cannot Load Image!!!" width="150" height="100"> 
                       </div>
                       <!-- In the below script the title,role and description are assigned -->
                     <p class="${ styles.title}" id="Title" style="font-size: larger;font-weight: lighter;"></p>
